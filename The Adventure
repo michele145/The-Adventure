@@ -1,0 +1,235 @@
+//THE ADVENTURE
+
+#include <iostream>
+#include <cstdlib>
+#include <time.h>
+#include <windows.h>
+
+using namespace std;
+
+#define R 20
+#define C 20
+
+char map[R][C];
+int i, j;
+
+struct {
+    int protx = 2;
+    int proty = 2;
+    char prot = '@';
+}hero; //creo una struct per il protagonista
+
+
+struct {
+    int nemx = 0;
+    int nemy = 0;
+    char nem = '&';
+}nemico; //creo una struct per il nemico
+
+
+struct {
+    int vitx = 19;
+    int vity = 19;
+    char vit = '$';
+}vittoria; //creo una struct per il trofeo
+
+
+int vittoria_gameover(bool run) //funzione per la condizione di Game Over o di Vittoria
+{
+    if (nemico.nemx == hero.protx || nemico.nemy == hero.proty) {
+        system("cls");
+        cout << endl << "GAME OVER!";
+        cout << endl;
+        run = false;
+        system("pause>nul");
+    }
+    if (hero.protx == vittoria.vitx && hero.proty == vittoria.vity) {
+        system("cls");
+        cout << endl << "COMPLIMENTI, HAI VINTO!";
+        cout << endl;
+        run = false;
+        system("pause>nul");
+    }
+    return run;
+}
+
+
+int mappa() //funzione per inizializzare e stampare la mappa di gioco
+{
+
+    for (i = 0; i < R; i++) {
+        for (j = 0; j < C; j++) {
+            map[i][j] = '.';
+        }
+    } //inizializzo
+
+    map[hero.protx][hero.proty] = hero.prot; //posiziono il protagonista
+    map[vittoria.vitx][vittoria.vity] = vittoria.vit; //posiziono il trofeo
+    map[nemico.nemx][nemico.nemy] = nemico.nem; //posiziono il nemico
+
+    for (i = 0; i < R; i++) {
+        cout << endl;
+        for (j = 0; j < C; j++) {
+            cout << map[i][j];
+        }
+    }
+
+    cout << endl << endl;
+
+    return 0;
+}
+
+
+int run() //funzione per far muovere il protagonista
+{
+
+    srand(time(NULL));
+
+    char scelta;
+    bool run = true;
+
+    /*con questo ciclo while e la variabile booleana run faccio in modo che venga semmpre chiesto all'utente di inserire un comando per muovere il protagonista mentre run è vera*/
+
+    while (run) {
+        cout << ">> ";
+        cin >> scelta;
+
+        // per muovere il protagonista ho scelto di usare i classici tasti W A S D
+
+        switch (scelta) {
+        case 'd':
+            hero.proty++;
+            system("cls");
+
+            //qui dico al programma di generare una posizione random da assegnare al nemico
+            nemico.nemx = rand() % 19 + 1;
+            nemico.nemy = rand() % 19 + 1;
+            mappa();
+            run = vittoria_gameover(run);
+
+            break;
+
+        case 'a':
+            hero.proty--;
+            system("cls");
+            nemico.nemx = rand() % 19 + 1;
+            nemico.nemy = rand() % 19 + 1;
+            mappa();
+            run = vittoria_gameover(run);
+
+            break;
+
+        case 'w':
+            hero.protx--;
+            system("cls");
+            nemico.nemx = rand() % 19 + 1;
+            nemico.nemy = rand() % 19 + 1;
+            mappa();
+            run = vittoria_gameover(run);
+
+            break;
+
+        case 's':
+            hero.protx++;
+            system("cls");
+            nemico.nemx = rand() % 19 + 1;
+            nemico.nemy = rand() % 19 + 1;
+            mappa();
+            run = vittoria_gameover(run);
+
+            break;
+
+        case 'm': //easter egg
+            system("cls");
+            cout << endl << endl << endl << endl << endl << endl << endl;
+            cout << "#########################################################################################################################################################################################################################################";
+            cout << endl << endl << endl;
+            cout << "Wow, complimenti! Hai trovato l'easter egg! Infatti hai premuto il tasto 'm' che e' l'iniziale del mio nome (ecco perche' nel menu principale ho scritto che era importante leggere le info, ";
+            cout << "perche' li dico il mio nome XD), bravo!" << endl;
+            cout << "Ora contattami alla mia mail (michele.picciotti06@gmail.com), inviami una foto o screen di questa schermata e io ti inviero' il codice del gioco e potrai modificarlo, venderlo e fare qualsisi cosa tu voglia!";
+            cout << endl << endl << endl;
+            cout << "#########################################################################################################################################################################################################################################";
+            system("pause>nul");
+            return 0;
+
+            break;
+
+        case 'q':
+            cout << "Ciao, grazie per aver giocato! A presto!";
+            run = 0; //faccio in modo che run sia falsa e quindi faccio uscire l'utente dal programma
+            run = false;
+            run = vittoria_gameover(run);
+
+            break;
+
+        default:
+            cout << endl << "TASTO CLICCATO NON VALIDO!" << endl;
+
+            break;
+        }
+    }
+    exit(EXIT_SUCCESS);
+
+    return 0;
+}
+
+
+int main()
+{
+    srand(time(NULL));
+
+    int menu;
+
+a:
+    cout << "THE ADVENTURE" << endl << endl << "1)Informazioni(IMPORTANTE)" << endl << "2)Regole" << endl << "3)Gioca" << endl << endl << "La tua scelta: ";
+
+    cin >> menu;
+
+    switch (menu) {
+    case 1:
+        system("cls");
+        cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
+        cout << "Ciao, mi chiamo Michele Picciotti e faccio il 2 superiore al Liceo Scientifico di Bitonto, sto studiando da autodidatta il C++ e ho conoscenze regresse di C.";
+        cout << "Per esercitarmi ho deciso di creare questo piccolo giochino, so benissimo che sia pieno di bug e schifezze XD, se ne trovate qualcuno segnalatemelo pure alla mia mail: 'michele.picciotti06@gmail.com' ";
+        cout << "Voglio comunque avvisarvi che in futuro usciranno nuovi aggiornamenti sul gioco e avranno nuovi livelli, funzionalita' ecc";
+        cout << endl << "ATENZIONE: Nel gioco ho inserito un piccolo Easter Egg, a chi lo trovera' dico di contattarmi alla mia mail e gli (o le XD ) daro' il codice sorgente del gioco e sara' libero / a ";
+        cout << "di farne cio' che vuole, BUONA FORTUNA!" << endl << endl << "Premere un tasto per continuare...";
+        system("pause>nul");
+        system("cls");
+        goto a;
+
+        break;
+
+    case 2:
+        system("cls");
+        cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
+        cout << "Allora, l'obbiettivo del gioco e' raggiungere il trofeo '$' muovendo il vostro personaggio '@' all' interno della mappa con i classici tasti W A S D, attenzione pero': ";
+        cout << "nella mappa si muovera' in maniera casuale il nemico '&' e cerchera' di prendervi, se questo avviene il gioco terminera'!";
+        cout << endl << endl << "Premere un tasto per continuare...";
+        system("pause>nul");
+        system("cls");
+        goto a;
+
+        break;
+
+    case 3:
+        system("cls");
+        mappa();
+        run();
+        cout << endl << endl << "Premere un tasto per continuare...";
+        system("pause>nul");
+        system("cls");
+        goto a;
+
+        break;
+
+    default:
+        cout << endl << "Scelta non valida!";
+
+        break;
+    }
+
+    system("pause>nul");
+
+    return 0;
+}
